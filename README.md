@@ -2,6 +2,9 @@
 
 Book2Notionは、Kindleでハイライトした文章を一括でNotionにインポートするデスクトップツールです。
 
+## ダウンロード
+[Release](https://github.com/watayu0828/book2notion/releases)から、環境にあったzipファイルをダウンロードし、PCの任意の場所に解凍してください。
+
 ## 初期設定
 
 ### 1. Book2Notion用のデータベースを複製
@@ -22,7 +25,7 @@ NotionとBook2Notionを連携させるためのインテグレーショントー
 
 ### 4. 環境ファイルにインテグレーショントークンとデータベースIDを転記
 
-`.env` ファイルにインテグレーショントークンとデータベースIDを転記します。
+`_internal`フォルダにある`.env` ファイルにインテグレーショントークンとデータベースIDを転記します。
 
 ```
 TOKEN='secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
