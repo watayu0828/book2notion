@@ -65,7 +65,7 @@ Kindleアプリからハイライトのデータを出力します。
 
 インポートが完了すると、Notionにデータが追加されます。
 
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/f8f3ccad-2d5a-45ef-b17f-08d93d8a9bb6" width="80%" />
+<img src="https://github.com/watayu0828/book2notion/assets/10852460/6bc8a270-c48b-4509-a1d2-e488baa8fdc4" width="80%" />
 
 ## Licence
 
