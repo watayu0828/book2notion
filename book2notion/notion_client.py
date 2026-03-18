@@ -85,7 +85,14 @@ class NotionClient:
 
             # Rate-limited — honour Retry-After header
             if response.status_code == 429:
-                retry_after = float(response.headers.get("Retry-After", backoff))
+                header_value = response.headers.get("Retry-After")
+                retry_after = backoff
+                if header_value is not None:
+                    try:
+                        retry_after = float(header_value)
+                    except ValueError:
+                        # Non-numeric Retry-After (e.g. HTTP-date); fall back to current backoff
+                        pass
                 time.sleep(retry_after)
                 backoff *= 2
                 continue
