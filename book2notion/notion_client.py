@@ -93,9 +93,11 @@ class NotionClient:
                     except ValueError:
                         # Non-numeric Retry-After (e.g. HTTP-date); fall back to current backoff
                         pass
-                time.sleep(retry_after)
-                backoff *= 2
-                continue
+                if attempt < MAX_RETRIES:
+                    time.sleep(retry_after)
+                    backoff *= 2
+                    continue
+                break
 
             # Server error — retry with backoff
             if response.status_code >= 500 and attempt < MAX_RETRIES:
