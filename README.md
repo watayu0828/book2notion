@@ -14,7 +14,7 @@ NotionとBook2Notionを連携させるためのインテグレーショントー
 
 [こちら](https://notion-lab.jp/2024-01-21-notion-integration-connect/)の記事を参考にインテグレーショントークンを作成してください。
 
-ここで作成したインテグレーショントークン（secret_から始まる英数字）は、後の手順で使用します。
+ここで作成したインテグレーショントークン（secret\_から始まる英数字）は、後の手順で使用します。
 
 ### 3. データベースとインテグレーションを接続
 
@@ -22,14 +22,14 @@ NotionとBook2Notionを連携させるためのインテグレーショントー
 
 ### 4. 環境ファイルにインテグレーショントークンとデータベースIDを転記
 
-`.env` ファイルにインテグレーショントークンとデータベースIDを転記します。
+`.env.example` をコピーして `.env` を作成し、インテグレーショントークンとデータベースIDを転記します。
 
 ```
 TOKEN='secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 DATABASE_ID='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
-TOKENには、インテグレーション作成時に取得したインテグレーショントークン（secret_から始まる英数字）を貼り付けしてください。
+TOKENには、インテグレーション作成時に取得したインテグレーショントークン（secret\_から始まる英数字）を貼り付けしてください。
 
 DATABASE_IDには、複製したデータベースのURLからデータベースIDをコピーし、貼り付けてください。下記例の`{}` 内の文字列です。
 
