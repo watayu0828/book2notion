@@ -1,80 +1,85 @@
-## 概要
+# Book2Notion
 
-Book2Notionは、Kindleでハイライトした文章を一括でNotionにインポートするデスクトップツールです。
+[![CI](https://github.com/watayu0828/book2notion/actions/workflows/ci.yml/badge.svg)](https://github.com/watayu0828/book2notion/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 
-## 初期設定
+Import your Kindle highlights into a Notion database with one click.
 
-### 1. Book2Notion用のデータベースを複製
+## Features
 
-[こちら](https://www.notion.so/3d443390a32544e9825255cd6aa5010e?pvs=21)の専用のデータベースを自身のワークスペースに複製してください。
+- Parse Kindle highlight export HTML files
+- Automatically create Notion database entries for each highlight
+- Supports **Japanese** and **English** Kindle exports (auto-detected)
+- Simple GUI — just select a file and import
 
-### 2. インテグレーションの作成とインテグレーショントークンを取得
+## Prerequisites
 
-NotionとBook2Notionを連携させるためのインテグレーショントークンを作成します。
+- Python 3.10 or later
+- A Notion account with an integration token
 
-[こちら](https://notion-lab.jp/2024-01-21-notion-integration-connect/)の記事を参考にインテグレーショントークンを作成してください。
+## Quick Start
 
-ここで作成したインテグレーショントークン（secret\_から始まる英数字）は、後の手順で使用します。
+### 1. Clone the repository
 
-### 3. データベースとインテグレーションを接続
-
-[こちら](https://notion-lab.jp/2024-01-21-notion-integration-connect/#Notion%20%E3%82%A4%E3%83%B3%E3%83%86%E3%82%B0%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95)の記事を参考にBook2Notionのデータベースと上記で作成したインテグレーションを接続してください。
-
-### 4. 環境ファイルにインテグレーショントークンとデータベースIDを転記
-
-`.env.example` をコピーして `.env` を作成し、インテグレーショントークンとデータベースIDを転記します。
-
+```bash
+git clone https://github.com/watayu0828/book2notion.git
+cd book2notion
 ```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Set up Notion integration
+
+1. Duplicate [this database template](https://www.notion.so/3d443390a32544e9825255cd6aa5010e) to your Notion workspace.
+2. Create a Notion integration and obtain the integration token. See the [Notion integration guide](https://developers.notion.com/docs/create-a-notion-integration) for instructions.
+3. Connect the integration to your duplicated database.
+
+### 4. Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and fill in your credentials:
+
+```text
 TOKEN='secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-DATABASE_ID='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+DATA_SOURCE_ID='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
-TOKENには、インテグレーション作成時に取得したインテグレーショントークン（secret\_から始まる英数字）を貼り付けしてください。
+- **TOKEN**: Your Notion integration token (starts with `secret_`).
+- **DATA_SOURCE_ID**: Navigate to your database URL to get the database ID, then call the [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database) API to get a list of `data_sources`. Use the `id` of the desired data source. Alternatively, in the Notion app, open the database settings menu → **Manage data sources** → **Copy data source ID**.
 
-DATABASE_IDには、複製したデータベースのURLからデータベースIDをコピーし、貼り付けてください。下記例の`{}` 内の文字列です。
+### 5. Run
 
-`https://hoge.notion.site/{データベースID}?v=xxxxxxxxxxxxxxxx&pvs=4`
+```bash
+python -m book2notion
+```
 
-## 使い方
+Select your Kindle export HTML file in the dialog, and your highlights will be imported into Notion.
 
-### 1. Kindleアプリからハイライトをエクスポート
+## Export Kindle Highlights
 
-Kindleアプリからハイライトのデータを出力します。
+1. Open the Kindle app and go to the **Annotations** page of a book.
+2. Tap the **Export** button.
+3. Choose **Email** and send the export to yourself.
+4. Download the attached HTML file to your PC.
 
-#### ① 「注釈」ページにあるエクスポートボタンをタップします
+## Contributing
 
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/58fe3b34-fc51-46ee-b7a6-a5d3117d7ba1" width="30%" />
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
 
-#### ② 「Eメール」をタップします
-
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/1556ba6a-f952-4022-b5aa-d0dcd8c58072" width="30%" />
-
-#### ③ 「エクスポート」ボタンをタップして、自身のメールアドレス宛てにメールを送信します
-
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/b3640134-c6ec-411d-9692-1f194a71d7d7" width="30%" />
-
-### 2. メールに添付されたデータをPCにダウンロード
-
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/575c910d-6474-441c-b5a8-d523f66e5e3c" width="80%" />
-
-### 3. Book2Notionを実行し、エクスポートしたファイルを選択
-
-`book2notion.py` を実行し、エクスポートしたファイルを選択します。
-
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/8666ca6a-655c-4428-ad8c-d2b5cee3c1e4" width="80%" />
-
-インポートが完了すると、Notionにデータが追加されます。
-
-<img src="https://github.com/watayu0828/book2notion/assets/10852460/f8f3ccad-2d5a-45ef-b17f-08d93d8a9bb6" width="80%" />
-
-## Licence
+## License
 
 [MIT](LICENSE)
 
-## サポート
+## Support
 
-Book2Notionはフリーソフトですが、応援・寄付歓迎です。
-
-活動の励みになりますので、応援よろしくお願いします！🙌
+Book2Notion is free and open source. If you find it useful, consider supporting the project:
 
 <a href="https://www.buymeacoffee.com/watayu0828" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
