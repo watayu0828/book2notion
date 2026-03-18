@@ -62,14 +62,23 @@ class NotionClient:
         """
         payload = self._build_payload(highlight, book)
         backoff = INITIAL_BACKOFF
+        last_exception: Exception | None = None
 
         for attempt in range(1, MAX_RETRIES + 1):
-            response = requests.post(
-                NOTION_API_URL,
-                json=payload,
-                headers=self._headers,
-                timeout=30,
-            )
+            try:
+                response = requests.post(
+                    NOTION_API_URL,
+                    json=payload,
+                    headers=self._headers,
+                    timeout=30,
+                )
+            except requests.RequestException as exc:
+                last_exception = exc
+                if attempt < MAX_RETRIES:
+                    time.sleep(backoff)
+                    backoff *= 2
+                    continue
+                break
 
             if response.status_code == 200:
                 return response.json()  # type: ignore[no-any-return]
@@ -89,6 +98,11 @@ class NotionClient:
 
             # Client error (4xx except 429) or final server error — don't retry
             break
+
+        if last_exception is not None:
+            raise NotionAPIError(
+                f"Request to Notion API failed after {MAX_RETRIES} attempts: {last_exception}"
+            ) from last_exception
 
         raise NotionAPIError(
             f"Notion API error {response.status_code}: {response.text}"
